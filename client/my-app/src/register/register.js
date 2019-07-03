@@ -55,7 +55,7 @@ export default class Register extends React.Component {
                     <TextField
                         required
                         id="outlined-name"
-                        label="כינוי"
+                        label="איך קוראים לך?"
                         name="name"
                         value={this.state.name}
                         onChange={this.handleChange}
