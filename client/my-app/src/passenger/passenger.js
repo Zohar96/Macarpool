@@ -1,16 +1,16 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
+import { isNull } from 'util';
 
 export default class Passenger extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { destination: "",date: "" ,time: ""};
+        this.state = { destination: "", date: "", start_time: "", end_time:""};
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        //this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
@@ -21,14 +21,8 @@ export default class Passenger extends React.Component {
     }
 
     validateForm = () => {
-        return this.state.phone.length > 0 && this.state.name.length > 0;
-    }
-
-    handleSubmit = event => {
-        alert("good");
-        //context.router.history.push('/home');
-    }
-
+        return this.state.end_time > this.state.start_time;
+}
     render() {
         return (
             <div className="passenger">
@@ -37,7 +31,6 @@ export default class Passenger extends React.Component {
                         required
                         label="יעד"
                         name="destination"
-                        value={this.state.phone}
                         onChange={this.handleChange}
                         margin="normal"
                         variant="outlined"
@@ -45,24 +38,30 @@ export default class Passenger extends React.Component {
                     <TextField
                         id="date"
                         label="תאריך"
+                        name="date"
                         type="date"
+                        onChange={this.handleChange}
                         InputLabelProps={{ shrink: true }}
                     />
                     <TextField
                         id="start_time"
                         label="החל מ-"
                         type="time"
+                        name="start_time"
                         defaultValue="07:00"
+                        onChange={this.handleChange}
                         InputLabelProps={{shrink: true}}
                     />
                     <TextField
                         id="end_time"
                         label="עד"
                         type="time"
-                        defaultValue="09:00"
+                        name="end_time"
+                        onChange={this.handleChange}
+                        defaultValue="09:00"                        
                         InputLabelProps={{shrink: true}}
                     />
-                    <Button>חפש</Button>
+                    <Button variant="contained" disabled={this.validateForm()} onClick={this.props.handleLogin}>חפש</Button>
                 </FormControl>
             </div>
         );
