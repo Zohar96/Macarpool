@@ -23,11 +23,6 @@ export default class Register extends React.Component {
         return this.state.phone.length > 0 && this.state.name.length > 0;
     }
 
-    // handleSubmit = event => {
-    //     alert("good");
-    //     //context.router.history.push('/home');
-    // }
-
     render() {
         return (
             <div className="Login">
