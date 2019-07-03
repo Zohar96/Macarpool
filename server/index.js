@@ -21,7 +21,6 @@ function addUser(phone, name) {
   });
 }
 
-
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
@@ -32,9 +31,50 @@ app.listen(PORT, () => {
 }); 
 
 app.get('/Register/:phone/:name', function(req, res) {
-    
     addUser(req.params.phone, req.params.name);
+    res.send(200);
+})
 
+app.get("/getAllUsers",(req, res) => {
+  var allUsers = [];
+  client.connect(err => {
+    const cursor = client.db("Macarpool").collection("users").find({}).toArray(function(err, result) {
+      allUsers=result;
+      if (err) throw err;
+      console.log(result);
+      return res.send(allUsers);
+    })
+    // perform actions on the collection object
+    client.close();
+  });
+})
+
+app.get("/getAllWays",(req, res) => {
+  var allWays = [];
+  client.connect(err => {
+    const cursor = client.db("Macarpool").collection("ways").find({}).toArray(function(err, result) {
+      allWays=result;
+      if (err) throw err;
+      console.log(result);
+      return res.send(allWays);
+    })
+    // perform actions on the collection object
+    client.close();
+  });
+})
+
+app.get("/getAllRequest",(req, res) => {
+  var allRequest = [];
+  client.connect(err => {
+    const cursor = client.db("Macarpool").collection("requests").find({}).toArray(function(err, result) {
+      allRequest=result;
+      if (err) throw err;
+      console.log(result);
+      return res.send(allRequest);
+    })
+    // perform actions on the collection object
+    client.close();
+  });
 })
 
 
