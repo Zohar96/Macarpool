@@ -125,6 +125,6 @@ app.get("/getWayOfDriver/:driverPhone",function(req,res){
       return res.send(waysOfDrivers);
     })
   });
-  
-  
 })
+
+
