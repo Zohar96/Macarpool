@@ -21,6 +21,38 @@ function addUser(phone, name) {
   });
 }
 
+function addNewRide(phone, p1, p2, p3, dest, source, date) {
+  client.connect(err => {
+    const cursor = client.db("Macarpool").collection("ways").insertOne({
+        driverPhone: phone,
+        p1: p1,
+        p2:p2,
+        p3:p3,
+        dest:dest,
+        source:source,
+        date:date
+    }, function (err, result) {
+        console.log("Inserted document into the collection");
+    });
+
+    // perform actions on the collection object
+    client.close();
+  });
+}
+
+app.get('/newRide/:phone/:p1/:p2/:p3/:dest/:source/:date', function(req, res) {
+  addNewRide(req.params.phone,
+          req.params.p1,
+          req.params.p2,
+          req.params.p3,
+          req.params.dest,
+          req.params.source,
+          req.params.date);
+  res.send(200);
+})
+
+
+
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
@@ -35,7 +67,7 @@ app.get('/Register/:phone/:name', function(req, res) {
     res.send(200);
 })
 
-app.get("/getAllUsers",(req, res) => {
+app.get("/getAllUsers", function (req, res) {
   var allUsers = [];
   client.connect(err => {
     const cursor = client.db("Macarpool").collection("users").find({}).toArray(function(err, result) {
@@ -49,19 +81,24 @@ app.get("/getAllUsers",(req, res) => {
   });
 })
 
-app.get("/getAllWays",(req, res) => {
+app.get("/getAllWays",function (req, res) {
+  var ways =getWays();
+  res.send(ways);
+})
+
+function getWays() {
   var allWays = [];
   client.connect(err => {
     const cursor = client.db("Macarpool").collection("ways").find({}).toArray(function(err, result) {
       allWays=result;
       if (err) throw err;
       console.log(result);
-      return res.send(allWays);
     })
     // perform actions on the collection object
     client.close();
   });
-})
+  return allWays;
+}
 
 app.get("/getAllRequest",(req, res) => {
   var allRequest = [];
@@ -77,4 +114,17 @@ app.get("/getAllRequest",(req, res) => {
   });
 })
 
+app.get("/getWayOfDriver/:driverPhone",function(req,res){
+  var ways = getWays();
+  var waysOfDrivers = [];
 
+  client.connect(err => {
+    client.db("Macarpool").collection("ways").find({'driverPhone':req.params.driverPhone}).toArray(function(err, result) {
+      waysOfDrivers=result;
+      if (err) throw err;
+      return res.send(waysOfDrivers);
+    })
+  });
+  
+  
+})
